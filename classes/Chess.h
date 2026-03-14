@@ -41,6 +41,8 @@ public:
     bool canBitMoveFromTo(Bit &bit, BitHolder &src, BitHolder &dst) override;
     bool actionForEmptyHolder(BitHolder &holder) override;
     void bitMovedFromTo(Bit &bit, BitHolder &src, BitHolder &dst) override;
+    void updateAI() override;
+    bool gameHasAI() override { return true; }
 
     void stopGame() override;
 
@@ -70,6 +72,13 @@ private:
     void generatePawnMoveList(std::vector<BitMove>& moves, const BitBoard pawns, const BitBoard emptySquares, int colorAsInt);
 
     std::vector<BitMove> generateAllMoves();
+    std::vector<BitMove> generateAllMovesForBoard(const BitBoard boards[NumBitBoards], int color) const;
+    void buildBoardsFromState(const std::string& state, BitBoard boards[NumBitBoards]) const;
+    bool moveLeavesKingInCheck(const BitMove& move, int movingColor, const BitBoard boards[NumBitBoards]) const;
+    int evaluateBoard(const BitBoard boards[NumBitBoards]) const;
+    int negamax(BitBoard boards[NumBitBoards], int depth, int alpha, int beta, int colorToMove) const;
+    BitMove findBestMove(int depth) const;
+    bool executeMoveOnBoard(const BitMove& move);
     bool isSquareAttacked(int square, int attackerColor, const BitBoard boards[NumBitBoards]) const;
     bool moveLeavesKingInCheck(const BitMove& move, int movingColor) const;
     void rebuildAggregateBoards(BitBoard boards[NumBitBoards]) const;
